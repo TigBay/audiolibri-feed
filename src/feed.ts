@@ -56,7 +56,14 @@ async function resolveMp3(relinker: string) {
   return url
 }
 
-async function buildFeed(program: string, forceRefresh: boolean = false) {
+type BuildOptions = {
+  forceRefresh?: boolean
+  // true: le puntate che spariscono da RaiPlay Sound restano nel feed (archivio che cresce)
+  keepMissing?: boolean
+}
+
+async function buildFeed(program: string, options: BuildOptions = {}) {
+  const { forceRefresh = false, keepMissing = false } = options
   const start = performance.now()
 
   log('SERVE', program)
@@ -120,6 +127,21 @@ async function buildFeed(program: string, forceRefresh: boolean = false) {
   error(program, `${ep.title} / ${ep.episode_title}: ${(err as Error).message}`)
 }
 
+    // Aggiorna sempre i metadati, così restano disponibili anche quando la puntata sparisce
+    if (cache[id]) {
+      const meta = {
+        title: ep.episode_title ?? ep.title,
+        description: ep.description,
+        link: BASE + ep.weblink,
+        duration: ep.audio?.duration
+      }
+      if (JSON.stringify(meta) !== JSON.stringify({
+        title: cache[id]!.title, description: cache[id]!.description,
+        link: cache[id]!.link, duration: cache[id]!.duration
+      })) modified = true
+      Object.assign(cache[id]!, meta)
+    }
+
     currentEps.add(id)
   }
 
@@ -127,6 +149,11 @@ async function buildFeed(program: string, forceRefresh: boolean = false) {
   const missing = Object.keys(cache).filter(id => !currentEps.has(id))
 
   for (const id of missing) {
+    // Si tiene una puntata vecchia solo se abbiamo i metadati per descriverla
+    if (keepMissing && cache[id]?.title) {
+      log('KEEP', program, id)
+      continue
+    }
     log('DELETE', program, id)
     delete cache[id]
   }
@@ -143,13 +170,13 @@ async function buildFeed(program: string, forceRefresh: boolean = false) {
 
   for (const item of items) {
     const ep = episodes.find((e: any) => e.uniquename === item.id)
-    const episodeDuration = parseAudioDuration(ep.audio?.duration)
+    const episodeDuration = parseAudioDuration(ep?.audio?.duration ?? item.duration)
 
     feed.addItem({
-      title: ep.episode_title ?? ep.title,
+      title: ep ? ep.episode_title ?? ep.title : item.title!,
       id: item.id,
-      link: BASE + ep.weblink,
-      description: ep.description,
+      link: ep ? BASE + ep.weblink : item.link ?? BASE,
+      description: ep ? ep.description : item.description,
       date: new Date(item.date),
       extensions:
         episodeDuration === undefined

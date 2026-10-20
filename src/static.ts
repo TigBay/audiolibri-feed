@@ -4,14 +4,15 @@ import { buildFeed } from "./feed.js"
 import { initCache } from "./cache.js"
 import { SITE_URL } from "./config.js"
 
-type FeedEntry = { title: string; path: string; note: string }
+type FeedEntry = { title: string; path: string; note: string; keepMissing?: boolean }
 
 // Programmi: aggiornati di continuo (le ultime puntate in onda)
 const programmi: FeedEntry[] = [
   {
     title: "Ad alta voce",
     path: "programmi/adaltavoce",
-    note: "Il programma di Radio3: il romanzo letto in questo periodo"
+    note: "Il programma di Radio3: tutte le puntate dal 20 ottobre 2026 in poi",
+    keepMissing: true
   }
 ]
 
@@ -58,7 +59,7 @@ await fs.mkdir("out/rss", { recursive: true })
 for (const feed of allFeeds) {
   try {
     console.log(`Generating ${feed.title}: ${feed.path}`)
-    const xml = await buildFeed(feed.path)
+    const xml = await buildFeed(feed.path, { keepMissing: feed.keepMissing })
     const file = path.join("out/rss", `${feed.path}.xml`)
     await fs.mkdir(path.dirname(file), { recursive: true })
     await fs.writeFile(file, xml)

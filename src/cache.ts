@@ -9,6 +9,11 @@ interface Episode {
   mp3: string
   date: Date | string
   resolvedAt: number | string
+  // Metadati salvati per poter tenere nel feed anche le puntate che Rai non mostra più
+  title?: string
+  description?: string
+  link?: string
+  duration?: string
 }
 
 type Cache = {

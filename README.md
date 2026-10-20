@@ -8,7 +8,7 @@ Elenco aggiornato dei feed: <https://tigbay.github.io/audiolibri-feed/>
 
 | Titolo | Note | Feed RSS |
 |--------|------|----------|
-| Ad alta voce | Il programma in onda: il romanzo letto in questo periodo | https://tigbay.github.io/audiolibri-feed/rss/programmi/adaltavoce.xml |
+| Ad alta voce | Il programma in onda. Le puntate vecchie restano: il feed cresce ogni giorno dal 20 ottobre 2026 | https://tigbay.github.io/audiolibri-feed/rss/programmi/adaltavoce.xml |
 | Caro Michele – Natalia Ginzburg | Romanzo in lettere, lingua vicina al parlato | https://tigbay.github.io/audiolibri-feed/rss/audiolibri/caromichele.xml |
 | Le voci della sera – Natalia Ginzburg | Un paese, una famiglia, le sue voci | https://tigbay.github.io/audiolibri-feed/rss/audiolibri/levocidellasera.xml |
 | Le piccole virtù – Natalia Ginzburg | Brevi saggi autobiografici | https://tigbay.github.io/audiolibri-feed/rss/audiolibri/lepiccolevirtu.xml |
@@ -36,6 +36,7 @@ Tutte queste app hanno tema scuro e sleep timer.
 2. Per ogni voce in [`src/static.ts`](src/static.ts) lo script scarica il JSON della pagina su raiplaysound.it, ad esempio `https://www.raiplaysound.it/audiolibri/caromichele.json`.
 3. Gli URL audio di Rai (`relinkerServlet.htm`) vengono risolti fino al file MP3/MP4 sul CDN, così le app di podcast li riproducono senza problemi.
 4. Gli URL già risolti finiscono in `cache/` e vengono ricontrollati ogni 14 giorni, per non rifare tutto a ogni esecuzione.
+   Per i feed con `keepMissing: true` (per ora solo Ad alta voce) in cache vengono salvati anche titolo, descrizione e durata: così le puntate che Rai toglie dal programma restano nel feed.
 5. I file XML vengono scritti in `out/` e pubblicati con **GitHub Pages**, insieme a `index.html` e `stato.json`.
 
 I file audio restano sui server Rai: qui viene generato solo l'indice delle puntate.
