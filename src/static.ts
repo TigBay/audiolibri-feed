@@ -19,39 +19,9 @@ const programmi: FeedEntry[] = [
 // Audiolibri completi dall'archivio di Ad alta voce
 const audiolibri: FeedEntry[] = [
   {
-    title: "Caro Michele – Natalia Ginzburg",
-    path: "audiolibri/caromichele",
-    note: "Romanzo in lettere, lingua vicina al parlato (lettura di Anna Bonaiuto)"
-  },
-  {
-    title: "Le voci della sera – Natalia Ginzburg",
-    path: "audiolibri/levocidellasera",
-    note: "Un paese, una famiglia, le sue voci"
-  },
-  {
-    title: "Le piccole virtù – Natalia Ginzburg",
-    path: "audiolibri/lepiccolevirtu",
-    note: "Brevi saggi autobiografici"
-  },
-  {
-    title: "Valentino – Natalia Ginzburg",
-    path: "audiolibri/valentino",
-    note: "Racconto lungo, solo 5 puntate"
-  },
-  {
     title: "Mansfield Park – Jane Austen",
     path: "audiolibri/mansfieldpark",
     note: "Il libro letto in Ad alta voce prima di Miss Brodie"
-  },
-  {
-    title: "Racconti di Italo Calvino",
-    path: "audiolibri/raccontidiitalocalvino",
-    note: "Racconti brevi, uno per sera"
-  },
-  {
-    title: "Favole al telefono – Gianni Rodari",
-    path: "audiolibri/favolealtelefono",
-    note: "Favole brevissime, lingua semplice"
   }
 ]
 
