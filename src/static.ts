@@ -2,7 +2,7 @@ import fs from "fs/promises"
 import path from "path"
 import { buildFeed } from "./feed.js"
 import { initCache } from "./cache.js"
-import { REPO_URL, SITE_URL } from "./config.js"
+import { SITE_URL } from "./config.js"
 
 type FeedEntry = { title: string; path: string; note: string }
 
@@ -50,6 +50,7 @@ const audiolibri: FeedEntry[] = [
 ]
 
 const allFeeds = [...programmi, ...audiolibri]
+const stato: { path: string; ok: boolean; errore?: string }[] = []
 
 await initCache()
 await fs.mkdir("out/rss", { recursive: true })
@@ -62,16 +63,15 @@ for (const feed of allFeeds) {
     await fs.mkdir(path.dirname(file), { recursive: true })
     await fs.writeFile(file, xml)
     console.log(`Generated ${file}`)
+    stato.push({ path: feed.path, ok: true })
   } catch (err) {
+    stato.push({ path: feed.path, ok: false, errore: String((err as Error)?.stack ?? err).slice(0, 500) })
     console.error(`Skipped ${feed.title} (${feed.path})`)
     console.error(err)
   }
 }
 
 const feedUrl = (feed: FeedEntry) => `${SITE_URL}/rss/${feed.path}.xml`
-
-const markdownRows = (feeds: FeedEntry[]) =>
-  feeds.map(f => `| ${f.title} | ${f.note} | ${feedUrl(f)} |`).join("\n")
 
 const htmlRows = (feeds: FeedEntry[]) =>
   feeds
@@ -83,48 +83,7 @@ const htmlRows = (feeds: FeedEntry[]) =>
     )
     .join("\n")
 
-const readme = `# Audiolibri feed
-
-Feed RSS per ascoltare **Ad alta voce** (Rai Radio 3) e alcuni audiolibri di RaiPlay Sound in qualsiasi app di podcast (AntennaPod, Pocket Casts, Podcast Addict, Apple Podcasts…), con tema scuro e sleep timer.
-
-Scelti per ascoltare prima di dormire e per allenare l'italiano di tutti i giorni.
-
-## Programmi
-
-| Titolo | Note | Feed RSS |
-|--------|------|----------|
-${markdownRows(programmi)}
-
-## Audiolibri
-
-| Titolo | Note | Feed RSS |
-|--------|------|----------|
-${markdownRows(audiolibri)}
-
-## Come si usa
-
-Copia l'URL del feed e incollalo nella tua app di podcast alla voce "Aggiungi feed RSS".
-
-## Aggiungere un audiolibro
-
-Apri la pagina del libro su raiplaysound.it, ad esempio \`https://www.raiplaysound.it/audiolibri/caromichele\`, e aggiungi in [src/static.ts](${REPO_URL}/blob/main/src/static.ts):
-
-\`\`\`ts
-{
-  title: "Caro Michele – Natalia Ginzburg",
-  path: "audiolibri/caromichele",
-  note: "Breve descrizione"
-}
-\`\`\`
-
-La tabella qui sopra si aggiorna da sola alla prossima esecuzione della Action (ogni ora).
-
-## Crediti
-
-Basato su [giuliomagnifico/raiplaysound-feed](https://github.com/giuliomagnifico/raiplaysound-feed), a sua volta derivato da [frammenti/raiplaysoundrss](https://github.com/frammenti/raiplaysoundrss). Licenza GPL-3.0. I file audio restano sui server Rai: qui si genera solo l'indice delle puntate.
-`
-
-await fs.writeFile("README.md", readme)
+await fs.writeFile("out/stato.json", JSON.stringify({ aggiornato: new Date().toISOString(), feed: stato }, null, 2))
 
 await fs.writeFile(
   "out/index.html",

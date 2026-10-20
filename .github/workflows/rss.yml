@@ -34,13 +34,12 @@ jobs:
       - name: Generate feeds
         run: npm run static
 
-      - name: Commit updated README and cache
+      - name: Commit updated cache
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add README.md
           git add -f cache/
-          git diff --cached --quiet || git commit -m "Update README and cache"
+          git diff --cached --quiet || git commit -m "Aggiorna cache"
           git push
 
       - name: Upload Pages artifact
