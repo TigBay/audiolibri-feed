@@ -1,0 +1,39 @@
+{
+  "name": "audiolibri-feed",
+  "version": "1.0",
+  "description": "RaiPlay Sound RSS feeds generator for GitHub Actions + Pages",
+  "keywords": [
+    "rss"
+  ],
+  "homepage": "https://github.com/TigBay/audiolibri-feed#readme",
+  "bugs": {
+    "url": "https://github.com/TigBay/audiolibri-feed/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TigBay/audiolibri-feed.git"
+  },
+  "license": "GPL-3.0-or-later",
+  "author": "frammenti",
+  "type": "module",
+  "main": "index.js",
+ "scripts": {
+  "build": "tsc",
+  "start": "node dist/src/index.js",
+  "static": "npm run build && node dist/src/static.js"
+},
+  "dependencies": {
+    "@fastify/rate-limit": "^10.3.0",
+    "fastify": "^5.8.5",
+    "feed": "^5.2.1",
+    "luxon": "^3.7.2"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.7.1",
+    "@types/node": "^25.6.0",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": "^24"
+  }
+}
