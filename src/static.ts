@@ -39,6 +39,11 @@ const audiolibri: FeedEntry[] = [
     note: "Racconto lungo, solo 5 puntate"
   },
   {
+    title: "Mansfield Park – Jane Austen",
+    path: "audiolibri/mansfieldpark",
+    note: "Il libro letto in Ad alta voce prima di Miss Brodie"
+  },
+  {
     title: "Racconti di Italo Calvino",
     path: "audiolibri/raccontidiitalocalvino",
     note: "Racconti brevi, uno per sera"

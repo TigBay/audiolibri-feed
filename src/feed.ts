@@ -14,6 +14,41 @@ const MEDIA_URL = 'https://creativemedia'
 const MEDIA_URL_FULL = 'https://creativemedia{0}-rai-it.akamaized.net/'
 const PATTERN = /ostr(?<number>\d+)\/(?<file>.*?mp\d)/
 
+// RaiPlay Sound risponde con una pagina HTML (invece del JSON) alle richieste che non
+// sembrano venire da un browser: serve uno User-Agent da browser e i cookie della homepage.
+const BROWSER_UA =
+  'Mozilla/5.0 (Linux; Android 16; SM-A065M) AppleWebKit/537.36 (KHTML, like Gecko) ' +
+  'Chrome/143.0.0.0 Mobile Safari/537.36'
+let raiCookies: Promise<string> | undefined
+
+function getRaiCookies() {
+  raiCookies ??= fetchT(BASE, { headers: { 'User-Agent': BROWSER_UA } })
+    .then(res =>
+      res.headers
+        .getSetCookie()
+        .map(c => c.split(';')[0])
+        .join('; ')
+    )
+    .catch(() => '')
+  return raiCookies
+}
+
+async function fetchRaiJson(url: string) {
+  const res = await fetchT(url, {
+    headers: {
+      'User-Agent': BROWSER_UA,
+      Accept: 'application/json',
+      Cookie: await getRaiCookies()
+    }
+  })
+  const text = await res.text()
+  try {
+    return JSON.parse(text)
+  } catch {
+    throw new Error(`HTTP ${res.status}: risposta non JSON (${text.trim().slice(0, 80)})`)
+  }
+}
+
 function parseAudioDuration(value: unknown): number | undefined {
   if (typeof value !== 'string') return undefined
 
@@ -70,7 +105,7 @@ async function buildFeed(program: string, options: BuildOptions = {}) {
 
   const url = `${BASE}/${program}.json`
   const [data, cache] = await Promise.all([
-    fetchT(url).then(r => r.json()),
+    fetchRaiJson(url),
     readCache(program)
   ])
 
