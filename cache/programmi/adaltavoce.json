@@ -137,7 +137,7 @@
   "ContentItem-0c098ec3-aeba-4042-be3a-14ae09435729": {
     "mp3": "https://creativemedia4-rai-it.akamaized.net/podcastcdn/Rai/audiocut/30741112_1800.mp3",
     "date": "2026-11-02T16:31:00.000Z",
-    "resolvedAt": 1793639587729,
+    "resolvedAt": 1794867498139,
     "title": "1. Bambino bruciato",
     "description": "Fausto Paravidino legge Bambino bruciato di Stig Dagerman",
     "link": "https://www.raiplaysound.it/audio/2026/11/Ad-alta-voce-del-02112026-0c098ec3-aeba-4042-be3a-14ae09435729.html",
@@ -223,5 +223,14 @@
     "description": "Fausto Paravidino legge Bambino bruciato di Stig Dagerman",
     "link": "https://www.raiplaysound.it/audio/2026/11/Ad-alta-voce-del-13112026-354394ef-24f7-4e0d-bbc1-2003451b2060.html",
     "duration": "00:25:28"
+  },
+  "ContentItem-fed2e6b7-7dea-476a-893a-011cd2633649": {
+    "mp3": "https://creativemedia3-rai-it.akamaized.net/podcastcdn/Rai/audiocut/30857227_1800.mp3",
+    "date": "2026-11-16T16:36:00.000Z",
+    "resolvedAt": 1794867496704,
+    "title": "11. Bambino bruciato",
+    "description": "Fausto Paravidino legge Bambino bruciato di Stig Dagerman",
+    "link": "https://www.raiplaysound.it/audio/2026/11/Ad-alta-voce-del-16112026-fed2e6b7-7dea-476a-893a-011cd2633649.html",
+    "duration": "00:16:20"
   }
 }
